@@ -1,2 +1,7 @@
-# Distribuida-practica-2
-Práctica 2 de Computación Distribuida 2025-1
+# *UNAM* - Computación Distribuida
+## Práctica 2 - Algoritmos
+
+### Implementación de los algoritmos
+
+---
+### Integrantes
