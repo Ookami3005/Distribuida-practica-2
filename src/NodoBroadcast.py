@@ -18,19 +18,24 @@ class NodoBroadcast(Nodo):
 
     def broadcast(self, env):
         ''' Algoritmo de Broadcast. Desde el nodo distinguido (0)
-            vamos a enviar un mensaje a todos los demás nodos.'''
+            vamos a enviar un mensaje a todos los demás nodos.
+
+            - Si el nodo tiene un mensaje inicial (`self.mensaje` no es `None`), se considera el nodo distinguido y envía el mensaje a todos sus vecinos.
+            - Si el nodo no tiene un mensaje inicial, espera a recibir un mensaje en su canal de entrada.
+            - Al recibir un mensaje, lo reenvía a todos sus vecinos excepto al nodo del cual recibió el mensaje, evitando ciclos innecesarios.    
+        '''
         
         if self.mensaje is not None:
             # Nodo distinguido inicia el broadcast
-            print(f"Tiempo {env.now}: Nodo {self.id_nodo} envía mensaje '{self.mensaje}' a sus vecinos")
-            self.canal_salida.envia((self.id_nodo, self.mensaje), self.vecinos)
+            print(f"Tiempo {env.now}: Nodo {self.get_id()} envía mensaje '{self.mensaje}' a sus vecinos")
+            self.canal_salida.envia((self.get_id(), self.mensaje), self.vecinos)
         else:
             while True:
                 mensaje = yield self.canal_entrada.get()
-                print(f"Tiempo {env.now}: Nodo {self.id_nodo} recibió mensaje '{mensaje[1]}' del nodo {mensaje[0]}")
+                print(f"Tiempo {env.now}: Nodo {self.get_id()} recibió mensaje '{mensaje[1]}' del nodo {mensaje[0]}")
                 if self.mensaje is None:
                     self.mensaje = mensaje[1]  # Actualizar el mensaje del nodo con el mensaje recibido
-                    for vecino in self.vecinos:
-                        if vecino.get_id() != mensaje[0]:
-                            print(f"Tiempo {env.now}: Nodo {self.id_nodo} reenvía mensaje '{mensaje[1]}' a Nodo {vecino.get_id()}")
-                            self.canal_salida.envia(mensaje, [vecino])
+                    for vecino_id in self.vecinos:
+                        if vecino_id != mensaje[0]:
+                            print(f"Tiempo {env.now}: Nodo {self.get_id()} reenvía mensaje '{mensaje[1]}' a Nodo {vecino_id}")
+                            self.canal_salida.envia(mensaje, [vecino_id])
