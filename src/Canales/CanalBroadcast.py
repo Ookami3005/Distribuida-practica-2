@@ -20,19 +20,12 @@ class CanalBroadcast(Canal):
         self.canales.append(canal_entrada)
         return canal_entrada
     
-    def registra_nodo(self, nodo):
-        '''
-        Registra un nodo en el canal.
-        '''
-        self.canales[nodo.get_id()] = nodo
-
     def envia(self, mensaje, vecinos):
         '''
         Envia un mensaje a los canales de entrada de los vecinos.
         '''
         for vecino_id in vecinos:
-            if vecino_id in self.canales:
-                nodo_vecino = self.canales[vecino_id]
-                print(f"Tiempo {self.env.now}: Enviando mensaje '{mensaje[1]}' a Nodo {vecino_id}")
-                nodo_vecino.canal_entrada.put(mensaje)
+            canal_vecino = self.canales[vecino_id]
+            print(f"Tiempo {self.env.now}: Enviando mensaje '{mensaje}' a Nodo {vecino_id}")
+            canal_vecino.put(mensaje)
 

@@ -22,7 +22,6 @@ class NodoGenerador(Nodo):
         #Tu código aquí
         if self.id_nodo == 0:
             self.canal_salida.envia((self.id_nodo, 'GO'), self.vecinos)
-            return
 
         while True:
             mensaje = yield self.canal_entrada.get()
@@ -30,18 +29,19 @@ class NodoGenerador(Nodo):
             if bandera == 'GO':
                 if self.padre is None:
                     self.padre = remitente
+                    self.mensajes_esperados -= 1
                     if self.mensajes_esperados == 0:
-                        self.canal_salida.envia((self.id_nodo, True), [v for v in self.vecinos if v.id_nodo == remitente])
+                        self.canal_salida.envia((self.id_nodo, True), [remitente])
                     else:
-                        self.canal_salida.envia((self.id_nodo, 'GO'), [vecino for vecino in self.vecinos if vecino.id_nodo != remitente])
+                        self.canal_salida.envia((self.id_nodo, 'GO'), [vecino for vecino in self.vecinos if vecino != remitente])
                 else:
-                    self.canal_salida.envia((self.id_nodo, False), [v for v in self.vecinos if v.id_nodo == remitente])
+                    self.canal_salida.envia((self.id_nodo, False), [remitente])
             else:
                 self.mensajes_esperados -= 1
                 if bandera: self.hijos.append(remitente)
                 if self.mensajes_esperados == 0:
                     if self.padre != self.id_nodo:
-                        self.canal_salida.envia((self.id_nodo, True), [v for v in self.vecinos if v.id_nodo == self.padre])
+                        self.canal_salida.envia((self.id_nodo, True), [self.padre])
 
 
 
