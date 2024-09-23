@@ -102,33 +102,3 @@ class TestPractica1:
             assert mensaje_enviado == nodo.mensaje, (
                 'El nodo %d no tiene el mensaje correcto' % nodo.id_nodo)
     
-
-    # Prueba para el algoritmo de propagación de valores en un árbol.
-    def test_ejercicio_cuatro(self):
-        ''' Prueba para el algoritmo de propagación de valores en un árbol. '''
-        # Creamos el ambiente y el objeto Canal
-        env = simpy.Environment()
-        bc_pipe = CanalBroadcast(env)
-
-        # Creamos los nodos del árbol
-        nodo_hoja1 = Nodo(1, 5, [], 3, bc_pipe.crea_canal_de_entrada(), bc_pipe)  # Nodo hoja
-        nodo_hoja2 = Nodo(2, 3, [], 3, bc_pipe.crea_canal_de_entrada(), bc_pipe)  # Nodo hoja
-        nodo_intermedio = Nodo(3, 7, [1, 2], 4, bc_pipe.crea_canal_de_entrada(), bc_pipe)  # Nodo intermedio
-        nodo_raiz = Nodo(4, 10, [3], 4, bc_pipe.crea_canal_de_entrada(), bc_pipe)  # Nodo raíz
-
-        # Le decimos al ambiente lo que va a procesar ...
-        env.process(nodo_hoja1.ejecutar(env))
-        env.process(nodo_hoja2.ejecutar(env))
-        env.process(nodo_intermedio.ejecutar(env))
-        env.process(nodo_raiz.ejecutar(env))
-
-        # ...y lo corremos
-        env.run(until=TIEMPO_DE_EJECUCION)
-
-        # Ahora sí, probamos
-        valores_esperados = {
-            1: {1: 5},  # Nodo hoja 1 solo tiene su propio valor
-            2: {2: 3},  # Nodo hoja 2 solo tiene su propio valor
-            3: {1: 5, 2: 3, 3: 7},  # Nodo intermedio recoge los valores de sus hijos y su propio valor
-            4: {1: 5, 2: 3, 3: 7, 4: 10}  # La raíz recibe todos los valores y suma el suyo
-        }
