@@ -1,4 +1,5 @@
 import simpy
+from Canales.Canal import Canal
 
 class Nodo:
     """Representa un nodo.
@@ -7,7 +8,7 @@ class Nodo:
     Los métodos que tiene son únicamente getters.
     """
     def __init__(self, id_nodo: int, vecinos: list, canal_entrada: simpy.Store,
-                 canal_salida: simpy.Store):
+                 canal_salida: Canal):
         """Inicializa los atributos del nodo."""
 
     def get_id(self) -> int:

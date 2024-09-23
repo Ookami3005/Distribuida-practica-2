@@ -2,6 +2,7 @@ Integrantes:
 
 -Del Monte Ortega Maryam Michelle 320083527
 -Monroy Romero Sahara Mariel 320206391
+- Romero Cruz Fernando 319314256
 
 Explicación de Algoritmos:
 
@@ -11,6 +12,13 @@ Explicación de Algoritmos:
 Este algoritmo para conocer a los vecinos de los vecinos en una red sigue un enfoque colaborativo entre los nodos. Cada nodo comienza enviando a sus vecinos la lista de sus propios vecinos. Luego, a medida que 
 los nodos reciben estas listas, actualizan su conjunto de identificadores, lo que les permite expandir su conocimiento más allá de sus conexiones inmediatas. Este intercambio de información puede continuar opcionalmente, 
 permitiendo una mayor difusión y actualización de las listas de vecinos en la red. A través de esta interacción, cada nodo termina con un conjunto completo que incluye no solo a sus vecinos directos, sino también a los vecinos de estos. 
+
+** NodoGenerador
+
+Esta función busca hallar un árbol generador a través de los nodos del sistema. Partiendo desde el nodo distinguido, se envia la bandera GO a sus nodos hijos,
+de modo que puedan reconocerlo como su padre y repetir este mismo proceso. Si algún nodo recibe un 'GO' cuando ya ha reconocido a su padre, entonces envía
+una bandera negativa al nodo remitente, indicando que ya posee un padre. Una vez que los nodos han recibido todos los mensajes que esperan, es decir, los
+de sus vecinos, entonces devuelve una bandera positiva a su padre. Cualquier nodo que reciba esta bandera positiva, reconoce a dicho nodo como uno de sus hijos.
 
 ** BroadCast:
 

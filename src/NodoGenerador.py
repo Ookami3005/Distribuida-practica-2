@@ -19,26 +19,27 @@ class NodoGenerador(Nodo):
         self.mensajes_esperados = len(vecinos) # Cantidad de mensajes que esperamos
 
     def genera_arbol(self, env):
-        #Tu código aquí
         if self.id_nodo == 0:
             self.canal_salida.envia((self.id_nodo, 'GO'), self.vecinos)
-            return
 
         while True:
             mensaje = yield self.canal_entrada.get()
+            yield env.timeout(1)
             remitente, bandera = mensaje
+            print(f'Nodo {self.id_nodo} recibio la bandera \'{bandera}\' del nodo \'{remitente}\'')
             if bandera == 'GO':
                 if self.padre is None:
                     self.padre = remitente
+                    self.mensajes_esperados -= 1
                     if self.mensajes_esperados == 0:
-                        self.canal_salida.envia((self.id_nodo, True), [v for v in self.vecinos if v.id_nodo == remitente])
+                        self.canal_salida.envia((self.id_nodo, True), [remitente])
                     else:
-                        self.canal_salida.envia((self.id_nodo, 'GO'), [vecino for vecino in self.vecinos if vecino.id_nodo != remitente])
+                        self.canal_salida.envia((self.id_nodo, 'GO'), [vecino for vecino in self.vecinos if vecino != remitente])
                 else:
-                    self.canal_salida.envia((self.id_nodo, False), [v for v in self.vecinos if v.id_nodo == remitente])
+                    self.canal_salida.envia((self.id_nodo, False), [remitente])
             else:
                 self.mensajes_esperados -= 1
                 if bandera: self.hijos.append(remitente)
                 if self.mensajes_esperados == 0:
                     if self.padre != self.id_nodo:
-                        self.canal_salida.envia((self.id_nodo, True), [v for v in self.vecinos if v.id_nodo == self.padre])
+                        self.canal_salida.envia((self.id_nodo, True), [self.padre]) 
