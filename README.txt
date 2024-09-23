@@ -1,8 +1,16 @@
 Integrantes:
 
 -Del Monte Ortega Maryam Michelle 320083527
+-Monroy Romero Sahara Mariel 320206391
 
 Explicación de Algoritmos:
+
+
+** NodoVecinos: 
+
+Este algoritmo para conocer a los vecinos de los vecinos en una red sigue un enfoque colaborativo entre los nodos. Cada nodo comienza enviando a sus vecinos la lista de sus propios vecinos. Luego, a medida que 
+los nodos reciben estas listas, actualizan su conjunto de identificadores, lo que les permite expandir su conocimiento más allá de sus conexiones inmediatas. Este intercambio de información puede continuar opcionalmente, 
+permitiendo una mayor difusión y actualización de las listas de vecinos en la red. A través de esta interacción, cada nodo termina con un conjunto completo que incluye no solo a sus vecinos directos, sino también a los vecinos de estos. 
 
 ** BroadCast:
 
@@ -19,4 +27,10 @@ Esta función simula cómo un mensaje se propaga desde un nodo inicial (nodo dis
 
 3. Al reenviar el mensaje, el nodo verifica que no lo envía de vuelta al nodo del cual lo recibió (verifica que el ID del vecino sea diferente al del nodo emisor).
 
+** Convergecast:
+
+El algoritmo implementa Convergecast en un árbol, donde cada nodo tiene un valor y debe enviar ese valor hacia su nodo padre. Si el nodo es una hoja (no tiene hijos), envía su valor 
+inmediatamente al padre. Los nodos intermedios, que no son hojas ni la raíz, esperan recibir los valores de todos sus hijos, los consolidan junto con su propio valor y 
+luego envían el conjunto consolidado al padre. Finalmente, la raíz, una vez que recibe todos los valores consolidados, ejecuta una función (en este caso, la suma de los valores) para obtener el resultado final. 
+El algoritmo simula la comunicación entre nodos utilizando canales de entrada y salida.
 
